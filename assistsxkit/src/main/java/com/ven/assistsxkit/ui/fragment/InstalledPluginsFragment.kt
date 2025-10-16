@@ -132,11 +132,7 @@ open class InstalledPluginsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        setupRecyclerView()
-//        setupSearchView()
-//        setupFab()
-//        setupEmptyView()
-//        setupSwipeRefresh()
+        setupMode()
         setupRadioLimitType()
         setupOrderAmountMode()
         setupInput()
@@ -178,6 +174,10 @@ open class InstalledPluginsFragment : Fragment() {
         setTextWatcher(binding.minAmount, "minAmount", minAmountVal)
         val maxAmountVal = FormCache.load(requireContext(), "maxAmount", "220")
         setTextWatcher(binding.maxAmount, "maxAmount", maxAmountVal)
+        val minDiscountVal = FormCache.load(requireContext(), "minDiscount", "0.3")
+        setTextWatcher(binding.minDiscount, "minDiscount", minDiscountVal)
+        val maxDiscountVal = FormCache.load(requireContext(), "maxDiscount", "1")
+        setTextWatcher(binding.maxDiscount, "maxDiscount", maxDiscountVal)
     }
 
     private fun setTextWatcher(editText: TextInputEditText, key: String, value: String) {
@@ -194,7 +194,7 @@ open class InstalledPluginsFragment : Fragment() {
 
     // 切换上限方式
     private fun setupRadioLimitType() {
-        val runTypeVal = FormCache.load(requireContext(), "runType")
+        val runTypeVal = FormCache.load(requireContext(), "runType", "sum")
 
         when (runTypeVal) {
             "sum" -> {
@@ -229,9 +229,43 @@ open class InstalledPluginsFragment : Fragment() {
         }
     }
 
+
+    // 切换模式
+    private fun setupMode() {
+        val modeVal = FormCache.load(requireContext(), "mode", "reverse")
+
+        when (modeVal) {
+            "reverse" -> {
+                binding.reverse.isChecked = true
+                binding.order.isChecked = false
+                binding.layoutDiscount.visibility = View.VISIBLE
+            }
+
+            "order" -> {
+                binding.reverse.isChecked = false
+                binding.order.isChecked = true
+                binding.layoutDiscount.visibility = View.GONE
+            }
+        }
+
+        binding.mode.setOnCheckedChangeListener { _, checkedId ->
+            when (checkedId) {
+                R.id.reverse -> {
+                    FormCache.save(requireContext(), "mode", "reverse")
+                    binding.layoutDiscount.visibility = View.VISIBLE
+                }
+
+                R.id.order -> {
+                    FormCache.save(requireContext(), "mode", "order")
+                    binding.layoutDiscount.visibility = View.GONE
+                }
+            }
+        }
+    }
+
     // 切换下单金额模式
     private fun setupOrderAmountMode() {
-        val orderAmountModeVal = FormCache.load(requireContext(), "orderAmountMode")
+        val orderAmountModeVal = FormCache.load(requireContext(), "orderAmountMode", "Fixed")
 
         when (orderAmountModeVal) {
             "Fixed" -> {
@@ -737,7 +771,10 @@ open class InstalledPluginsFragment : Fragment() {
             "minSleep" to FormCache.load(requireContext(), "minSleep", "2"),
             "maxSleep" to FormCache.load(requireContext(), "maxSleep", "3"),
             "api" to FormCache.load(requireContext(), "api", "https://www.binance.com"),
-            "secret" to FormCache.load(requireContext(), "secret", "")
+            "secret" to FormCache.load(requireContext(), "secret", ""),
+            "mode" to FormCache.load(requireContext(), "mode", "reverse"),
+            "minDiscount" to FormCache.load(requireContext(), "minDiscount", "0.3"),
+            "maxDiscount" to FormCache.load(requireContext(), "maxDiscount", "1")
         )
         CoroutineWrapper.launch {
             runMain { OverlayIndex.show(plugin, options) }
