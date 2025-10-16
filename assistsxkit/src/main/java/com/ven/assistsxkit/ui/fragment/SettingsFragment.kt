@@ -51,6 +51,14 @@ open class SettingsFragment : Fragment() {
         binding.layoutAutostartWhitelist.setOnClickListener {
             requestAutostartPermission()
         }
+
+        // 跳转github
+        binding.layoutGoGithub.setOnClickListener {
+            // 打开浏览器跳转github
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = "https://github.com/tetap/binance-alpha-auto-android".toUri()
+            startActivity(intent)
+        }
     }
 
 
