@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Tetap Alpha</string>
+    <string name="assists_description">Tetap Alpha</string>
+    <string name="sts_description">Tetap-STS</string>
+    <string name="sas_description">Tetap-SAS</string>
+    <string name="tbs_description">Tetap-TBS</string>
+</resources>

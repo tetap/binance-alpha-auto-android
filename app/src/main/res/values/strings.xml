@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Tetap Alpha</string>
+    <string name="assists_description">Tetap Alpha</string>
+    <string name="sts_description">Tetap-STS-解决WX混淆问题</string>
+    <string name="sas_description">Tetap-SAS-备选2</string>
+    <string name="tbs_description">Tetap-TBS-备选1</string>
+</resources>
