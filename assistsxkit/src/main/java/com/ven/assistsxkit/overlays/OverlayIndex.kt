@@ -101,10 +101,16 @@ object OverlayIndex : AssistsServiceListener {
         }
         if (plugin.path.startsWith("http")) {
             val queryParams = options.entries.joinToString("&") { "${it.key}=${it.value}" }
+
+            // 加上时间戳避免缓存
+            val noCacheParam = "t=${System.currentTimeMillis()}"
+            val finalParams =
+                if (queryParams.isNotEmpty()) "$queryParams&$noCacheParam" else noCacheParam
+
             val urlWithParams = if (plugin.url().contains("?")) {
-                "${plugin.url()}&$queryParams"
+                "${plugin.url()}&$finalParams"
             } else {
-                "${plugin.url()}?$queryParams"
+                "${plugin.url()}?$finalParams"
             }
             viewBinding?.web?.loadUrl(urlWithParams)
         } else {
